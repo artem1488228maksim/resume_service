@@ -1,0 +1,37 @@
+name: resume
+services:
+  web:
+    # Указываем директорию ./app, в которой содержится Dockerfile для сборки образа
+    build: ./apps
+    # Запускаем встроенный сервер Django
+    command: sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    # Пробрасываем 8000 порт контейнера на 8000 порт локалхоста(127.0.0.1:8000)
+    ports:
+      - "127.0.0.1:8000:8000"
+    # Файл содержащий переменные окружения для контейнера
+    env_file: .env # '-' для списков
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16.8
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+    ports:
+      - "5433:5432"
+    volumes:
+      - resume-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${SQL_DATABASE} -U ${SQL_USER}"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  resume-postgres-data:
+
+
