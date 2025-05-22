@@ -21,8 +21,6 @@ services:
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
       - POSTGRES_DB=${SQL_DATABASE}
-    ports:
-      - "5434:5432"
     volumes:
       - resume-postgres-data:/var/lib/postgresql/data
     healthcheck:
