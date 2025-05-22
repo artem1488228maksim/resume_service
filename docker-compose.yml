@@ -8,7 +8,7 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     # Пробрасываем 8000 порт контейнера на 8000 порт локалхоста(127.0.0.1:8000)
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8002:8000"
     # Файл содержащий переменные окружения для контейнера
     env_file: .env # '-' для списков
     depends_on:
@@ -22,7 +22,7 @@ services:
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
       - POSTGRES_DB=${SQL_DATABASE}
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - resume-postgres-data:/var/lib/postgresql/data
     healthcheck:
